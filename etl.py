@@ -35,7 +35,7 @@ def process_log_file(cur, filepath):
         df['ts'].values, 
         t.dt.hour.values,
         t.dt.day.values,
-        t.dt.isocalendar().week.values,
+        t.dt.week.values,
         t.dt.month.values,
         t.dt.year.values,
         t.dt.weekday.values

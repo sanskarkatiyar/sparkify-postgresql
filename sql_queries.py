@@ -10,9 +10,9 @@ time_table_drop = "DROP TABLE IF EXISTS time;"
 
 songplay_table_create = (
     """CREATE TABLE IF NOT EXISTS songplays ( \
-        songplay_id BIGSERIAL, \
-        start_time BIGINT, \
-        user_id VARCHAR, \
+        songplay_id SERIAL, \
+        start_time TIMESTAMP NOT NULL, \
+        user_id INTEGER NOT NULL, \
         level VARCHAR, \
         song_id VARCHAR, \
         artist_id VARCHAR, \
@@ -25,9 +25,9 @@ songplay_table_create = (
 
 user_table_create = (
     """CREATE TABLE IF NOT EXISTS users ( \
-        user_id VARCHAR, \
-        first_name VARCHAR, \
-        last_name VARCHAR, \
+        user_id INTEGER, \
+        first_name VARCHAR NOT NULL, \
+        last_name VARCHAR NOT NULL, \
         gender CHAR(1), \
         level VARCHAR, \
         PRIMARY KEY (user_id) \
@@ -37,8 +37,8 @@ user_table_create = (
 song_table_create = (
     """CREATE TABLE IF NOT EXISTS songs ( \
         song_id VARCHAR, \
-        title VARCHAR, \
-        artist_id VARCHAR, \
+        title VARCHAR NOT NULL, \
+        artist_id VARCHAR NOT NULL, \
         year DECIMAL, \
         duration DECIMAL, \
         PRIMARY KEY (song_id) \
@@ -48,7 +48,7 @@ song_table_create = (
 artist_table_create = (
     """CREATE TABLE IF NOT EXISTS artists ( \
         artist_id VARCHAR, \
-        name VARCHAR, \
+        name VARCHAR NOT NULL, \
         location VARCHAR, \
         latitude DECIMAL, \
         longitude DECIMAL, \
@@ -58,13 +58,13 @@ artist_table_create = (
 
 time_table_create = (
     """CREATE TABLE IF NOT EXISTS time ( \
-        start_time BIGINT, \
-        hour INTEGER, \
-        day INTEGER, \
-        week INTEGER, \
-        month INTEGER, \
-        year INTEGER, \
-        weekday INTEGER, \
+        start_time TIMESTAMP, \
+        hour INTEGER NOT NULL, \
+        day INTEGER NOT NULL, \
+        week INTEGER NOT NULL, \
+        month INTEGER NOT NULL, \
+        year INTEGER NOT NULL, \
+        weekday INTEGER NOT NULL, \
         PRIMARY KEY (start_time) \
     );"""
 )
@@ -74,7 +74,7 @@ time_table_create = (
 songplay_table_insert = (
     """INSERT INTO songplays (start_time, user_id, level, song_id, \
         artist_id, session_id, location, user_agent) \
-       VALUES ( %s, %s, %s, %s, %s, %s, %s, %s );"""
+       VALUES ( to_timestamp(%s), %s, %s, %s, %s, %s, %s, %s );"""
 )
 
 user_table_insert = (
@@ -106,8 +106,8 @@ artist_table_insert = (
 )
 
 time_table_insert = (
-    """INSERT INTO time (start_time, hour, day, week, month, year, weekday) \
-       VALUES ( %s, %s, %s, %s, %s, %s, %s ) \
+    """INSERT INTO time ( start_time, hour, day, week, month, year, weekday) \
+       VALUES ( to_timestamp(%s), %s, %s, %s, %s, %s, %s ) \
        ON CONFLICT (start_time) DO NOTHING;"""
 )
 
